@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:my_farm/screens/homePage.dart';
+import 'package:my_farm/widgets/floatingButton.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>();
@@ -41,16 +43,11 @@ class BottomNavigationBarWidget extends StatefulWidget {
 class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
   int _selectedIndex = 0;
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          GoRouter.of(context).go('/add');
-        },
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButtonLocation: ExpandableFab.location,
+      floatingActionButton: FloatingButtonWidget(),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -74,21 +71,18 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
               title: const Text('Home'),
               selectedColor: Colors.purple,
             ),
+            //calendar page
             SalomonBottomBarItem(
-              icon: const Icon(Icons.search),
-              title: const Text('Search'),
-              selectedColor: Colors.pink,
+              icon: const Icon(Icons.calendar_today),
+              title: const Text('Calendario'),
+              selectedColor: Colors.orange,
             ),
             SalomonBottomBarItem(
               icon: const Icon(Icons.favorite),
-              title: const Text('Favorite'),
+              title: const Text('Preferiti'),
               selectedColor: Colors.teal,
             ),
-            SalomonBottomBarItem(
-              icon: const Icon(Icons.person),
-              title: const Text('Profile'),
-              selectedColor: Colors.blue,
-            ),
+
           ],
         ),
       ),
