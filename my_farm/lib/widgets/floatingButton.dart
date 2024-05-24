@@ -1,6 +1,6 @@
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:flutter/material.dart';
-
+import 'package:go_router/go_router.dart';
 
 class FloatingButtonWidget extends StatelessWidget {
   FloatingButtonWidget({
@@ -44,6 +44,7 @@ class FloatingButtonWidget extends StatelessWidget {
           icon: const Icon(Icons.add),
           label: const Text('Registra un\'attività'),
           onPressed: () {
+            context.go('/insertData');
           },
           foregroundColor: Colors.white,
           backgroundColor: const Color.fromARGB(255, 113, 218, 160),

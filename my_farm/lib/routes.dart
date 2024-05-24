@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:my_farm/screens/homePage.dart';
+import 'package:my_farm/screens/calendarPage.dart';
+import 'package:my_farm/screens/insertPage.dart';
 import 'package:my_farm/widgets/floatingButton.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -22,6 +24,16 @@ final router = GoRouter(
           path: '/home',
           parentNavigatorKey: _shellNavigatorKey,
           builder: (context, state) => const HomePage(),
+        ),
+        GoRoute(
+          path: '/calendar',
+          parentNavigatorKey: _shellNavigatorKey,
+          builder: (context, state) => const CalendarPage(),
+        ),
+        GoRoute(
+          path: '/insertData',
+          //parentNavigatorKey: _shellNavigatorKey, 
+          builder: (context, state) => const InsertPage(),
         ),
       ],
     ),
@@ -43,9 +55,31 @@ class BottomNavigationBarWidget extends StatefulWidget {
 class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
   int _selectedIndex = 0;
 
+  void changePage(int index) {
+
+    switch (index) {
+      case 0:
+        context.go('/home');
+        break;
+      case 1:
+        context.go('/calendar');
+        break;
+      default:
+        context.go('/home');
+        break;
+    }
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('My Farm'),
+      ),
+      body: widget.child,
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: FloatingButtonWidget(),
       bottomNavigationBar: Container(
@@ -61,9 +95,7 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
         child: SalomonBottomBar(
           currentIndex: _selectedIndex,
           onTap: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
+            changePage(index);
           },
           items: [
             SalomonBottomBarItem(
