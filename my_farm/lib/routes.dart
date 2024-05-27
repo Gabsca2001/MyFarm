@@ -78,6 +78,20 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Farm'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              context.go('/insertData');
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              // Open settings page
+            },
+          ),
+        ],
       ),
       body: widget.child,
       floatingActionButtonLocation: ExpandableFab.location,
