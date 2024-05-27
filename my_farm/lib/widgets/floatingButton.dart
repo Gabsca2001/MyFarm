@@ -60,7 +60,16 @@ class FloatingButtonWidget extends StatelessWidget {
           backgroundColor: const Color.fromARGB(255, 113, 218, 160),
           elevation: 1,
         ),
-        
+        FloatingActionButton.extended(
+          heroTag: null,
+          icon: const Icon(Icons.money_off),
+          label: const Text('Registra una spesa'),
+          onPressed: () {
+          },
+          foregroundColor: Colors.white,
+          backgroundColor: const Color.fromARGB(255, 113, 218, 160),
+          elevation: 1,
+        ),
       ],
     );
   }
