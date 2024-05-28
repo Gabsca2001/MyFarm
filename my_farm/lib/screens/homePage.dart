@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:my_farm/models/activityModel.dart';
+import 'package:my_farm/models/spesaModel.dart';
+import 'package:my_farm/widgets/meteoWidget.dart';
+import 'package:my_farm/widgets/noteWidget.dart';
+import 'package:my_farm/widgets/spesaWidget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,11 +15,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   List<Activity> _activities = [];
+  List<Spesa> _spese = [];
 
   @override
   void initState() {
     super.initState();
     _loadActivities();
+    _loadSpese();
   }
 
   Future<void> _loadActivities() async {
@@ -25,11 +31,10 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-    Future<void> _deleteActivity(int index) async {
-    _activities.removeAt(index);
-    await storeActivities(_activities);
+  Future<void> _loadSpese() async {
+    List<Spesa> spese = await getSpese();
     setState(() {
-      // Update the state to reflect the changes
+      _spese = spese;
     });
   }
 
@@ -37,109 +42,26 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
 
+
     List<Activity> futureActivities = _activities.where((activity) => activity.date.isAfter(DateTime.now())).toList();
     List<Activity> pastActivities = _activities.where((activity) => activity.date.isBefore(DateTime.now())).toList();
 
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: double.infinity,
-              height: 250,
-              margin: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 233, 233, 233),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Benvenuto!',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                      'In questa pagina puoi visualizzare le attività future e passate.',
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            const MeteoWidget(),
             const SizedBox(height: 10),
-            const Text(
-              'Note future:',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const SizedBox(height: 20),
-            //mostra le attività
-            SizedBox(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: futureActivities.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    color: const Color.fromARGB(255, 141, 231, 144),
-                    child: ListTile(
-                      title: Text(futureActivities[index].name),
-                      subtitle: Text(futureActivities[index].description!),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () {
-                          _deleteActivity(index);
-                        },
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Attività passate:',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const SizedBox(height: 20),
-            SizedBox(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: pastActivities.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    child: ListTile(
-                      title: Text(pastActivities[index].name),
-                      subtitle: Text(pastActivities[index].description!),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () {
-                          _deleteActivity(index);
-                        },
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
+            NoteWidget(noteLabel: 'Note future', activities: futureActivities,),
+            const SizedBox(height: 10),
+            NoteWidget(noteLabel: 'Note passate', activities: pastActivities,),
+            const SizedBox(height: 10),
+            SpesaWidget(spese: _spese),
+
+            ],
         ),
       ),
     );

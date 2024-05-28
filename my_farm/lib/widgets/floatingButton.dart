@@ -23,14 +23,14 @@ class FloatingButtonWidget extends StatelessWidget {
         child: const Icon(Icons.add),
         fabSize: ExpandableFabSize.regular,
         foregroundColor: Colors.white,
-        backgroundColor: Color.fromARGB(255, 54, 228, 147),
+        backgroundColor: const Color.fromARGB(255, 54, 228, 147),
         shape: const CircleBorder(),
       ),
       closeButtonBuilder: RotateFloatingActionButtonBuilder(
         child: const Icon(Icons.close),
         fabSize: ExpandableFabSize.regular,
         foregroundColor: Colors.white,
-        backgroundColor: Color.fromARGB(255, 124, 216, 173),
+        backgroundColor: const Color.fromARGB(255, 124, 216, 173),
         shape: const CircleBorder(),
         
       ),
@@ -65,6 +65,7 @@ class FloatingButtonWidget extends StatelessWidget {
           icon: const Icon(Icons.money_off),
           label: const Text('Registra una spesa'),
           onPressed: () {
+            context.go('/insertSpesa');
           },
           foregroundColor: Colors.white,
           backgroundColor: const Color.fromARGB(255, 113, 218, 160),

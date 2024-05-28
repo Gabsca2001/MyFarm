@@ -1,53 +1,39 @@
-import 'package:flutter/material.dart';
-import 'package:my_farm/models/activityModel.dart';
-import 'package:go_router/go_router.dart';
 
-class InsertPage extends StatefulWidget {
-  const InsertPage({super.key});
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:my_farm/models/spesaModel.dart';
+
+
+class InsertSpesa extends StatefulWidget {
+  const InsertSpesa({super.key});
 
   @override
-  State<InsertPage> createState() => _InsertPageState();
+  State<InsertSpesa> createState() => _InsertSpesaState();
 }
 
-class _InsertPageState extends State<InsertPage> {
+class _InsertSpesaState extends State<InsertSpesa> {
 
-  //form key
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
-  List<Activity> _activities = [];
+  List<Spesa> _spese = [];
 
-  String _nameActivity = '';
-
-  String _description = '';
-
-  //text controller for the name of the activity
   late TextEditingController _nameController;
-
-  late List<String> _activityType;
-
-  String? _selectedActivity;
-
-  late Future<List<String>> _workers;
-
-  Map<String, bool> _selectedWorkers = {};
-
-  //date picker
+  String _name = '';
+  String _description = '';
+  String? _nameNegozio;
+  //data acquisto
   DateTime? _selectedDate;
-  // Time picker
-  TimeOfDay? _selectedTime;
+  //importo spesa
+  String? _importoSpesa;
+
+  late Future<List<String>> _stores;
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController();
-    _workers = _loadWorkers();
-    _activityType = getActivityTypes();
-    // Initialize the selected workers map
-    // var workers = await _workers;
-    // for (var worker in workers) {
-    //   _selectedWorkers[worker] = false;
-    // }
-    _loadActivities();
+    _loadSpese();
+    _stores = _loadStores();
   }
 
   @override
@@ -56,26 +42,36 @@ class _InsertPageState extends State<InsertPage> {
     super.dispose();
   }
 
-  Future<List<String>> _loadWorkers() async {
-    List<String> workers = await getWorkers();
-    setState(() {
-      _selectedWorkers = {for (var worker in workers) worker: false};
-    });
-    return workers;
+  Future<List<String>> _loadStores() async {
+    List<String> stores = await getStores();
+    return stores;
   }
 
-  Future<void> _loadActivities() async {
-    List<Activity> activities = await getActivities();
+  Future<void> _loadSpese() async {
+    List<Spesa> spese = await getSpese();
     setState(() {
-      _activities = activities;
+      _spese = spese;
     });
   }
 
+  void _setNameSpesa(String value) {
+    _name = value;
+  }
 
-  Future<void> _saveActivity() async {
+  void _setDescription(String value) {
+    setState(() {
+      _description = value;
+    });
+  }
 
-    //check if all the fields are filled
-    if (_nameActivity == '' || _selectedActivity == null || _selectedDate == null) {
+  void _setImportoSpesa(String value) {
+    setState(() {
+      _importoSpesa = value;
+    });
+  }
+
+  Future<void> _saveSpesa() async {
+    if(_name == '' || _nameNegozio == null || _description == '' || _selectedDate == null || _importoSpesa == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Compila tutti i campi obbligatori'),
@@ -86,46 +82,28 @@ class _InsertPageState extends State<InsertPage> {
       return;
     }
 
-    _selectedTime ??= TimeOfDay.now();
-
-    Activity newActivity = Activity(
-      name: _nameActivity,
-      type: _selectedActivity!,
+    Spesa newSpesa = Spesa(
+      name: _name,
+      store: _nameNegozio!,
       description: _description,
+      price: double.parse(_importoSpesa!),
       date: _selectedDate!,
-      time: _selectedTime!,
-      workers: _selectedWorkers.keys.where((worker) => _selectedWorkers[worker]!).toList(),
     );
-    _activities.add(newActivity);
-    await storeActivities(_activities);
-    //show a snackbar to confirm the activity has been saved
+    _spese.add(newSpesa);
+    await storeSpese(_spese);
+    // ignore: use_build_context_synchronously
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Attività salvata con successo'),
+        content: Text('Spesa salvata con successo'),
         backgroundColor: Colors.green,
         showCloseIcon: true,
       ),
     );
-  }
-
-
-
-  //set the name of the activity
-  void _setNameActivity(String value) {
-    setState(() {
-      _nameActivity = value;
-    });
-  }
-
-  void _setDescription(String value) {
-    setState(() {
-      _description = value;
-    });
+    
   }
 
   @override
   Widget build(BuildContext context) {
-    //form to insert data
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -170,15 +148,16 @@ class _InsertPageState extends State<InsertPage> {
                       ),
                       child: TextField(
                         controller: _nameController,
-                        onChanged: _setNameActivity,
+                        onChanged: _setNameSpesa,
                         decoration: const InputDecoration(
-                          labelText: 'Nome attività *',
+                          labelText: 'Nome spesa *',
                           icon: Icon(Icons.title),
                           border: InputBorder.none,
                         ),
                       ),
                     ),
-          
+                   
+                    //store name with future builder
                     //select dropdown for type of activity
                     Container(
                       padding: const EdgeInsets.all(8),
@@ -191,24 +170,32 @@ class _InsertPageState extends State<InsertPage> {
                         children: [
                           const Icon(Icons.work),
                           const SizedBox(width: 20),
-                          DropdownButton<String>(
-                              hint: const Text('Tipo di attività *'),
-                              value: _selectedActivity,
-                              icon: const Icon(Icons.arrow_drop_down),
-                              items: _activityType.map((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (String? value) {
-                                setState(() {
-                                  _selectedActivity = value;
-                                });
-                              },
-                              style: const TextStyle(
-                                color: Colors.black,
-                              )),
+                          FutureBuilder<List<String>>(
+                            future: _stores,
+                            builder: (context, snapshot) {
+                              if(snapshot.connectionState == ConnectionState.waiting) {
+                                return const CircularProgressIndicator();
+                              }
+                              if(snapshot.hasError) {
+                                return const Text('Errore nel caricamento dei negozi');
+                              }
+                              return DropdownButton<String>(
+                                hint: const Text('Seleziona il negozio *', style: TextStyle(color: Colors.black, fontSize: 16)),
+                                value: _nameNegozio,
+                                items: snapshot.data!.map((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value, style: const TextStyle(color: Colors.black, fontSize: 14)),
+                                  );
+                                }).toList(),
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    _nameNegozio = value;
+                                  });
+                                },
+                              );
+                            },
+                          ),
                         ],
                       ),
                     ),
@@ -223,7 +210,7 @@ class _InsertPageState extends State<InsertPage> {
                       child: TextField(
                         onChanged: _setDescription,
                         decoration: const InputDecoration(
-                          labelText: 'Descrizione',
+                          labelText: 'Prodotti acquistati *',
                           icon: Icon(Icons.description),
                         ),
                         maxLines: 2,
@@ -261,77 +248,31 @@ class _InsertPageState extends State<InsertPage> {
                         ],
                       ),
                     ),
-                    //time picker for activity time
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 15),
-                      margin: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.access_time),
-                          const SizedBox(width: 20),
-                          //time picker withouth button to show time
-                          GestureDetector(
-                            onTap: () async {
-                              final TimeOfDay? time = await showTimePicker(
-                                context: context,
-                                initialTime: TimeOfDay.now(),
-                              );
-                              setState(() {
-                                _selectedTime = time;
-                              });
-                            },
-                            child: Text(_selectedTime == null
-                                ? '${TimeOfDay.now().hour}:${TimeOfDay.now().minute}'
-                                : '${_selectedTime!.hour}:${_selectedTime!.minute}'),
-                          ),
-                        ],
-                      ),
-                    ),
-          
-                    //checkbox list to select workers
+
+                    //importo spesa
                     Container(
                       padding: const EdgeInsets.all(8),
                       margin: const EdgeInsets.all(8),
-                      height: MediaQuery.of(context).size.height * 0.2,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: FutureBuilder<List<String>>(
-                        future: _workers,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return ListView.builder(
-                              itemCount: snapshot.data!.length,
-                              itemBuilder: (context, index) {
-                                return CheckboxListTile(
-                                  title: Text(snapshot.data![index], style: const TextStyle(fontSize: 14)),
-                                  value: _selectedWorkers[snapshot.data![index]],
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      _selectedWorkers[snapshot.data![index]] = value!;
-                                    });
-                                  }
-                                );
-                              },
-                            );
-                          } else {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                        },
+                      child: TextField(
+                        onChanged: _setImportoSpesa,
+                        decoration: const InputDecoration(
+                          labelText: 'Importo spesa *',
+                          icon: Icon(Icons.euro),
+                          border: InputBorder.none,
+                        ),
+                        keyboardType: TextInputType.number,
                       ),
                     ),
+          
                     //button to submit the form
                     Container(
                       margin: const EdgeInsets.only(left: 8, right: 8, bottom: 16, top: 16),
                       child: ElevatedButton(
-                        onPressed: _saveActivity,
+                        onPressed: _saveSpesa,
                         style: ButtonStyle(
                           padding: MaterialStateProperty.all(const EdgeInsets.all(16)),
                           backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 39, 65, 71)),

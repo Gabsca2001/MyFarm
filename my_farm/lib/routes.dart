@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_farm/screens/userPage.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:my_farm/screens/homePage.dart';
 import 'package:my_farm/screens/calendarPage.dart';
 import 'package:my_farm/screens/insertPage.dart';
+import 'package:my_farm/screens/insertSpesa.dart';
 import 'package:my_farm/widgets/floatingButton.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -35,6 +37,16 @@ final router = GoRouter(
           //parentNavigatorKey: _shellNavigatorKey, 
           builder: (context, state) => const InsertPage(),
         ),
+        GoRoute(
+          path: '/insertSpesa',
+          parentNavigatorKey: _shellNavigatorKey, 
+          builder: (context, state) => const InsertSpesa(),
+        ),
+        GoRoute(
+          path: '/userPage',
+          parentNavigatorKey: _shellNavigatorKey,
+          builder: (context, state) => const UserPage(),
+        ),
       ],
     ),
   ],
@@ -64,6 +76,13 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
       case 1:
         context.go('/calendar');
         break;
+      case 2:
+        context.go('/insertSpesa');
+        break;
+      case 3:
+        context.go('/insertData');
+        break;
+
       default:
         context.go('/home');
         break;
@@ -89,11 +108,25 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
             icon: const Icon(Icons.settings),
             onPressed: () {
               // Open settings page
+              context.go('/userPage');
             },
           ),
         ],
       ),
-      body: widget.child,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [
+              Color.fromARGB(255, 255, 255, 255),
+              Color.fromARGB(255, 247, 215, 224),
+              Color.fromARGB(255, 191, 245, 227),
+            ],
+          ),
+        ),
+        child: widget.child,
+      ),
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: FloatingButtonWidget(),
       bottomNavigationBar: Container(
@@ -128,7 +161,11 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
               title: const Text('Preferiti'),
               selectedColor: Colors.teal,
             ),
-
+            SalomonBottomBarItem(
+              icon: const Icon(Icons.list),
+              title: const Text('Visualizza'),
+              selectedColor: const Color.fromARGB(255, 223, 114, 177),
+            ),
           ],
         ),
       ),

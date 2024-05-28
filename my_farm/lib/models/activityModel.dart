@@ -65,7 +65,7 @@ Future<List<Activity>> getActivities() async {
 }
 
 /*Activity types */
-List<String> activityTypes = ['Irrigazione', 'Fertilizzazione', 'Trattamento fitosanitario', 'Altro'];
+List<String> activityTypes = ['Irrigazione', 'Fertilizzazione', 'Trattamento fitosanitario', 'Lavoro manuale', 'Altro'];
 
 void addActivityType(String activityType) {
   activityTypes.add(activityType);
@@ -76,14 +76,44 @@ List<String> getActivityTypes() {
 }
 
 
-/*Workers */
-List<String> workers = ['Andrea', 'Gabriele', 'Giuseppe'];
 
-void addWorker(String worker) {
-  workers.add(worker);
+
+/*Workers */
+List<String> workers = ['Andrea', 'Gabriele', 'Giuseppe Lo Duca', 'Kevin'];
+
+Future<void> storeWorkers(List<String> workers) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setStringList('workers', workers);
 }
 
-List<String> getWorkers() {
+Future<List<String>> getWorkers() async {
+  final prefs = await SharedPreferences.getInstance();
+  List<String>? workers = prefs.getStringList('workers');
+  if (workers == null) {
+    // Se non ci sono lavoratori memorizzati, inizializziamo con la lista di prova
+    workers = ['Andrea', 'Gabriele', 'Giuseppe Lo Duca', 'Kevin'];
+    await storeWorkers(workers);
+  }
   return workers;
+}
+
+//prova
+List<String> prova = ['Andrea', 'Gabriele', 'Giuseppe Lo Duca', 'Kevin'];
+
+//store workers
+Future<void> storeProva(List<String> prova) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setStringList('prova', prova);
+}
+
+Future<List<String>> getProva() async {
+  final prefs = await SharedPreferences.getInstance();
+  List<String>? prova = prefs.getStringList('prova');
+  if (prova == null) {
+    // Se non ci sono lavoratori memorizzati, inizializziamo con la lista di prova
+    prova = ['Andrea', 'Gabriele', 'Giuseppe Lo Duca', 'Kevin'];
+    await storeProva(prova);
+  }
+  return prova;
 }
 
