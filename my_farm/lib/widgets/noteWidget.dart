@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_farm/models/activityModel.dart';
+import 'package:my_farm/widgets/noteDialog.dart';
 
 // ignore: must_be_immutable
 class NoteWidget extends StatefulWidget {
@@ -34,20 +35,11 @@ class _NoteWidgetState extends State<NoteWidget> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                widget.noteLabel!,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              Icon(
-                Icons.arrow_forward_ios,
-                color: Colors.black.withOpacity(0.6),
-              ),
-            ],
+          Text(
+            widget.noteLabel!,
+            style: const TextStyle(
+              fontWeight: FontWeight.w700,
+            ),
           ),
           const SizedBox(height: 20),
           //mostra le attività
@@ -62,101 +54,118 @@ class _NoteWidgetState extends State<NoteWidget> {
                       shrinkWrap: true,
                       itemCount: widget.activities!.length,
                       itemBuilder: (context, index) {
-                        return Container(
-                          margin: const EdgeInsets.only(bottom: 10),
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Container(
-                                    width: 50,
-                                    height: 50,
-                                    margin: const EdgeInsets.only(right: 10),
-                                    decoration: BoxDecoration(
-                                      color: Colors.black.withOpacity(0.1),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        '${widget.activities![index].date.day}/${widget.activities![index].date.month}',
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500,
-                                        ),
+                        return GestureDetector(
+                          onTap: () {
+                            //show dialog
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return NoteDialog(
+                                  name: widget.activities![index].name,
+                                  description: widget.activities![index].description!,
+                                  date: widget.activities![index].date,
+                                  time: widget.activities![index].time,
+                                  workers: widget.activities![index].workers,
+                                );
+                              },
+                            );
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(bottom: 10),
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.5),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      width: 50,
+                                      height: 50,
+                                      margin: const EdgeInsets.only(right: 10),
+                                      decoration: BoxDecoration(
+                                        color: Colors.black.withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
-                                    ),
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        widget.activities![index].name.length > 20
-                                            ? '${widget.activities![index].name.substring(0, 20)}...'
-                                            : widget.activities![index].name,
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 5),
-                                      Text(
-                                        widget.activities![index].description!.length > 30
-                                            ? '${widget.activities![index].description!.substring(0, 30)}...'
-                                            : widget.activities![index].description!,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              //aggiungi un pulsante per eliminare l'attività
-                              IconButton(
-                                icon: const Icon(Icons.delete_rounded),
-                                color: Colors.black,
-                                onPressed: () {
-                                  //show dialog
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: const Text('Elimina nota'),
-                                        content: const Text(
-                                            'Sei sicuro di voler eliminare questa nota?'),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: const Text('Annulla',
-                                                style: TextStyle(
-                                                    color: Colors.black)),
+                                      child: Center(
+                                        child: Text(
+                                          '${widget.activities![index].date.day}/${widget.activities![index].date.month}',
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w500,
                                           ),
-                                          TextButton(
-                                            onPressed: () {
-                                              _deleteActivity(index);
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: const Text('Elimina',
-                                                style: TextStyle(
-                                                    color: Colors.red)),
+                                        ),
+                                      ),
+                                    ),
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          widget.activities![index].name.length > 20
+                                              ? '${widget.activities![index].name.substring(0, 20)}...'
+                                              : widget.activities![index].name,
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
                                           ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                            ],
+                                        ),
+                                        const SizedBox(height: 5),
+                                        Text(
+                                          widget.activities![index].description!.length > 30
+                                              ? '${widget.activities![index].description!.substring(0, 30)}...'
+                                              : widget.activities![index].description!,
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                //aggiungi un pulsante per eliminare l'attività
+                                IconButton(
+                                  icon: const Icon(Icons.delete_rounded),
+                                  color: Colors.black,
+                                  onPressed: () {
+                                    //show dialog
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: const Text('Elimina nota'),
+                                          content: const Text(
+                                              'Sei sicuro di voler eliminare questa nota?'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: const Text('Annulla',
+                                                  style: TextStyle(
+                                                      color: Colors.black)),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                _deleteActivity(index);
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: const Text('Elimina',
+                                                  style: TextStyle(
+                                                      color: Colors.red)),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
                         );
                       },

@@ -97,23 +97,3 @@ Future<List<String>> getWorkers() async {
   return workers;
 }
 
-//prova
-List<String> prova = ['Andrea', 'Gabriele', 'Giuseppe Lo Duca', 'Kevin'];
-
-//store workers
-Future<void> storeProva(List<String> prova) async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.setStringList('prova', prova);
-}
-
-Future<List<String>> getProva() async {
-  final prefs = await SharedPreferences.getInstance();
-  List<String>? prova = prefs.getStringList('prova');
-  if (prova == null) {
-    // Se non ci sono lavoratori memorizzati, inizializziamo con la lista di prova
-    prova = ['Andrea', 'Gabriele', 'Giuseppe Lo Duca', 'Kevin'];
-    await storeProva(prova);
-  }
-  return prova;
-}
-

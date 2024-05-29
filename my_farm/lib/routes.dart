@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_farm/screens/listBarPage.dart';
 import 'package:my_farm/screens/userPage.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
@@ -47,6 +48,11 @@ final router = GoRouter(
           parentNavigatorKey: _shellNavigatorKey,
           builder: (context, state) => const UserPage(),
         ),
+        GoRoute(
+          path: '/listBarPage',
+          parentNavigatorKey: _shellNavigatorKey,
+          builder: (context, state) => const ListBarPage(),
+        ),
       ],
     ),
   ],
@@ -80,7 +86,7 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
         context.go('/insertSpesa');
         break;
       case 3:
-        context.go('/insertData');
+        context.go('/listBarPage');
         break;
 
       default:
@@ -96,16 +102,10 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Farm'),
+        title: const Text('La mia azienda'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              context.go('/insertData');
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.settings),
+            icon: const Icon(Icons.person),
             onPressed: () {
               // Open settings page
               context.go('/userPage');
