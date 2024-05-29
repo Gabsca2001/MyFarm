@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_farm/routes.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:syncfusion_localizations/syncfusion_localizations.dart';
 
-void main() {
+void main(){
+
   runApp(const MainApp());
 }
 
@@ -12,6 +15,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      
       title: 'My Farm',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -47,6 +51,17 @@ class MainApp extends StatelessWidget {
         
       ),
       routerConfig: router,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        SfGlobalLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', 'US'),
+        Locale('it', 'IT'),
+      ],
+      locale: const Locale('it', 'IT'),
     );
   }
 }

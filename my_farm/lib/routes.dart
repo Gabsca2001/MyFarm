@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_farm/screens/chartPage.dart';
+import 'package:my_farm/screens/insertRaccolto.dart';
 import 'package:my_farm/screens/listBarPage.dart';
 import 'package:my_farm/screens/userPage.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
@@ -31,7 +33,7 @@ final router = GoRouter(
         GoRoute(
           path: '/calendar',
           parentNavigatorKey: _shellNavigatorKey,
-          builder: (context, state) => const CalendarPage(),
+          builder: (context, state) => const TableEvents(),
         ),
         GoRoute(
           path: '/insertData',
@@ -52,6 +54,16 @@ final router = GoRouter(
           path: '/listBarPage',
           parentNavigatorKey: _shellNavigatorKey,
           builder: (context, state) => const ListBarPage(),
+        ),
+        GoRoute(
+          path: '/insertRaccolto',
+          parentNavigatorKey: _shellNavigatorKey,
+          builder: (context, state) => const InsertRaccolto(),
+        ),
+        GoRoute(
+          path: '/chartPage',
+          parentNavigatorKey: _shellNavigatorKey,
+          builder: (context, state) => const ChartPage(),
         ),
       ],
     ),
@@ -83,7 +95,7 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
         context.go('/calendar');
         break;
       case 2:
-        context.go('/insertSpesa');
+        context.go('/chartPage');
         break;
       case 3:
         context.go('/listBarPage');
@@ -157,8 +169,8 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
               selectedColor: Colors.orange,
             ),
             SalomonBottomBarItem(
-              icon: const Icon(Icons.favorite),
-              title: const Text('Preferiti'),
+              icon: const Icon(Icons.insert_chart_outlined),
+              title: const Text('Grafico'),
               selectedColor: Colors.teal,
             ),
             SalomonBottomBarItem(

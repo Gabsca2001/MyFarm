@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
-class SpesaDialog extends StatelessWidget {
+class RaccoltoDialog extends StatelessWidget {
 
   final String name;
-  final String store;
-  final double price;
-  final DateTime date;
   final String description;
-  
+  final DateTime date;
+  final double price;
+  final double quantity;
 
-  const SpesaDialog({
-    super.key, required this.name, required this.store, required this.price, required this.date, required this.description,
-  });
+
+
+  const RaccoltoDialog({super.key, required this.name, required this.description, required this.date, required this.price, required this.quantity});
 
   @override
   Widget build(BuildContext context) {
@@ -36,18 +34,21 @@ class SpesaDialog extends StatelessWidget {
                   color: Colors.black.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: const Icon(Icons.shopping_cart),
-              ),
-              SizedBox(
-                width: 200,
-                child: Flexible(
+                child: Center(
                   child: Text(
-                    name,
+                    '${date.day}/${date.month}',
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
+                ),
+              ),
+              Text(
+                name,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
               //close button
@@ -63,32 +64,20 @@ class SpesaDialog extends StatelessWidget {
           const SizedBox(height: 10),
           Row(
             children: [
-              const Text('Negozio: ', style: TextStyle(fontWeight: FontWeight.w600),),
-              Text(store),
+              const Text('Quantità: ', style: TextStyle(fontWeight: FontWeight.w600),),
+              Text('$quantity kg', style: const TextStyle(fontSize: 16),),
             ],
           ),
           const SizedBox(height: 10),
           Row(
             children: [
               const Text('Prezzo: ', style: TextStyle(fontWeight: FontWeight.w600),),
-              Text('$price€'),
+              Text('$price €', style: const TextStyle(fontSize: 16),),
             ],
           ),
           const SizedBox(height: 10),
-          Row(
-            children: [
-              const Text('Data: ', style: TextStyle(fontWeight: FontWeight.w600),),
-              Text('${date.day}/${date.month}/${date.year}'),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text('Descrizione: ', style: TextStyle(fontWeight: FontWeight.w600),),
-              Text(description),
-            ],
-          ),
+          const Text('Descrizione: ', style: TextStyle(fontWeight: FontWeight.w600),),
+          Text(description),
         ],
       ),
     );

@@ -98,8 +98,8 @@ class _SpesaWidgetState extends State<SpesaWidget> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      widget._spese[index].name.length > 20
-                                          ? '${widget._spese[index].name.substring(0, 20)}...'
+                                      widget._spese[index].name.length > 10
+                                          ? '${widget._spese[index].name.substring(0, 10)}...'
                                           : widget._spese[index].name,
                                       style: const TextStyle(
                                         fontWeight: FontWeight.w700,
@@ -128,7 +128,9 @@ class _SpesaWidgetState extends State<SpesaWidget> {
                               ],
                             ),
                             Text(
-                              '${widget._spese[index].price}€',
+                              widget._spese[index].price.toString().length > 5
+                                  ? '${widget._spese[index].price.toString().substring(0, 5)}€'
+                                  : '${widget._spese[index].price}€',
                               style: const TextStyle(
                                 fontWeight: FontWeight.w700,
                               ),

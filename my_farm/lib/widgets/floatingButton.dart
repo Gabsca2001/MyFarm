@@ -55,6 +55,7 @@ class FloatingButtonWidget extends StatelessWidget {
           icon: const Icon(Icons.balance_outlined),
           label: const Text('Registra una raccolta'),
           onPressed: () {
+            context.go('/insertRaccolto');
           },
           foregroundColor: Colors.white,
           backgroundColor: const Color.fromARGB(255, 113, 218, 160),

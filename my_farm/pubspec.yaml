@@ -10,10 +10,15 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_expandable_fab: ^2.0.0
+  flutter_localizations:
+    sdk: flutter
   go_router: ^14.1.1
   google_fonts: ^6.2.1
+  intl: any
   salomon_bottom_bar: ^3.3.2
   shared_preferences: ^2.2.3
+  syncfusion_flutter_charts: ^25.2.6
+  syncfusion_localizations: ^25.2.6
   table_calendar: ^3.1.1
   weather: ^3.1.1
 
