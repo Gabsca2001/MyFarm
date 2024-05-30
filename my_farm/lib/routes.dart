@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:my_farm/screens/chartPage.dart';
 import 'package:my_farm/screens/insertRaccolto.dart';
 import 'package:my_farm/screens/listBarPage.dart';
+import 'package:my_farm/screens/mapPage.dart';
 import 'package:my_farm/screens/userPage.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
@@ -65,6 +66,12 @@ final router = GoRouter(
           parentNavigatorKey: _shellNavigatorKey,
           builder: (context, state) => const ChartPage(),
         ),
+        GoRoute(
+          path: '/map',
+          parentNavigatorKey: _shellNavigatorKey,
+          builder: (context, state) => const MapPage(),
+        ),
+
       ],
     ),
   ],

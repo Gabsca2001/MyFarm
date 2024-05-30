@@ -4,6 +4,7 @@ import 'package:my_farm/models/spesaModel.dart';
 import 'package:my_farm/widgets/meteoWidget.dart';
 import 'package:my_farm/widgets/noteWidget.dart';
 import 'package:my_farm/widgets/spesaWidget.dart';
+import 'package:go_router/go_router.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -53,14 +54,20 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const MeteoWidget(),
-            const SizedBox(height: 10),
+            /*const MeteoWidget(),
+            */const SizedBox(height: 10),
             NoteWidget(noteLabel: 'Note future', activities: futureActivities,),
             const SizedBox(height: 10),
             NoteWidget(noteLabel: 'Note passate', activities: pastActivities,),
             const SizedBox(height: 10),
             SpesaWidget(spese: _spese),
-
+            //button to visualize map
+            ElevatedButton(
+              onPressed: () {
+                context.go('/map');
+              },
+              child: const Text('Visualizza mappa'),
+            ),
             ],
         ),
       ),
