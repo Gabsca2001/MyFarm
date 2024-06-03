@@ -105,6 +105,9 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
         context.go('/chartPage');
         break;
       case 3:
+        context.go('/map');
+        break;
+      case 4:
         context.go('/listBarPage');
         break;
 
@@ -179,6 +182,11 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
               icon: const Icon(Icons.insert_chart_outlined),
               title: const Text('Grafico'),
               selectedColor: Colors.teal,
+            ),
+            SalomonBottomBarItem(
+              icon: const Icon(Icons.map_rounded),
+              title: const Text('Mappa'),
+              selectedColor: Colors.pink,
             ),
             SalomonBottomBarItem(
               icon: const Icon(Icons.list),

@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
@@ -20,6 +19,9 @@ class _MapPageState extends State<MapPage> {
 
   //takes the list of crops from the model
   final List<Map<String, LatLng>> _cropCenters = crops.map((crop) => {crop.name: LatLng(crop.center[0], crop.center[1])}).toList();
+
+  //takes list of crops from the model
+
 
   @override
   void initState() {
@@ -157,21 +159,27 @@ class _MapPageState extends State<MapPage> {
           Positioned(
             top: 20,
             child: SizedBox(
-              height: 130,
+              height: 120,
               width: MediaQuery.of(context).size.width,
               child: ListView.builder(
                 controller: _scrollController,
                 physics: const PageScrollPhysics(),
                 scrollDirection: Axis.horizontal,
-                itemCount: _cropCenters.length,
+                itemCount: crops.length,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
-                      height: 130,
                       width: MediaQuery.of(context).size.width - 16,
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        gradient: const LinearGradient(
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          colors: [
+                            Color.fromARGB(255, 185, 238, 203),
+                            Color.fromARGB(255, 194, 218, 238),
+                          ],
+                        ),
                         borderRadius: BorderRadius.circular(10),
                         boxShadow: const [
                           BoxShadow(
@@ -181,23 +189,58 @@ class _MapPageState extends State<MapPage> {
                           ),
                         ],
                       ),
-                      child: Column(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(
-                            _cropCenters[index].keys.first,
-                            style: Theme.of(context).textTheme.titleMedium,
+                          //map icon
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Icon(
+                                Icons.location_on,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
                           ),
-                          const SizedBox(height: 10),
-                          Text(
-                            'Latitude: ${_cropCenters[index].values.first.latitude.toStringAsFixed(4)}',
-                            style: Theme.of(context).textTheme.bodyMedium,
+                          const SizedBox(width: 10),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                decoration: BoxDecoration(
+                                  color: Color.fromARGB(255, 37, 95, 97).withOpacity(0.8),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  crops[index].name,
+                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  crops[index].cultivation,
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              ),
+                            ],
                           ),
-                          Text(
-                            'Longitude: ${_cropCenters[index].values.first.longitude.toStringAsFixed(4)}',
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-
                         ],
                       ),
                     ),

@@ -5,13 +5,17 @@ class Crop{
   //polygon coordinates using the format [[lat, long], [lat, long], [lat, long], [lat, long]]
   final List<List<double>> coordinates;
 
-  Crop({required this.name, required this.center, required this.coordinates});
+  //current cultivation
+  final String cultivation;
+
+  Crop({required this.name, required this.center, required this.coordinates, required this.cultivation,});
 
   factory Crop.fromJson(Map<String, dynamic> json){
     return Crop(
       name: json['name'],
       center: json['center'],
       coordinates: json['coordinates'],
+      cultivation: json['cultivation'],
     );
   }
 
@@ -19,6 +23,8 @@ class Crop{
     return {
       'name': name,
       'coordinates': coordinates,
+      'center': center,
+      'cultivation': cultivation,
     };
   }
 }
@@ -26,7 +32,7 @@ class Crop{
 //create a list of crops
 List<Crop> crops = [
   Crop(
-    name: 'Home',
+    name: 'Casa',
     center: [37.949229, 13.179165],
     coordinates: [
       [
@@ -62,6 +68,7 @@ List<Crop> crops = [
         37.949229
       ]
     ],
+    cultivation: 'Apricot field',
   ),
   Crop(
     name: 'Olive field',
@@ -144,9 +151,10 @@ List<Crop> crops = [
         37.943054
       ]
     ],
+    cultivation: 'Olive field',
   ),
   Crop(
-    name: 'Meloni field',
+    name: 'Balletto',
     center: [37.92675, 13.14100],
     coordinates: [
       [
@@ -210,6 +218,7 @@ List<Crop> crops = [
         37.92571414257374
       ]
     ],
+    cultivation: 'Meloni Piel de Sapo',
   ),
 ];
 
